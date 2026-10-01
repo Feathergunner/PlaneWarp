@@ -15,7 +15,7 @@ def distfct_square(theta:np.ndarray, sidelength:float=1.0, rotation:float=0.0) -
 	'''
 	return sidelength / np.maximum(np.abs(np.cos(theta+rotation)), np.abs(np.sin(theta+rotation)))
 
-def distfct_blossom(theta:np.ndarray, min_rad:float=0.3, max_rad:float=2, num_rays:int=4, rotation:float=0.0) -> np.ndarray:
+def distfct_blossom(theta:np.ndarray, min_rad:float=0.8, max_rad:float=2, num_rays:int=4, rotation:float=0.0) -> np.ndarray:
 	'''
 	Defines a blossom-like shape, i.e. a star with slightly outward rounded rays
 	Works by linear interpolation of the distance to (0,0) in polar coordinates

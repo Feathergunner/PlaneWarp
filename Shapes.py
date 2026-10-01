@@ -26,15 +26,15 @@ class ShapeConstructor:
 		gridlines = []
 		xs = np.linspace(x_min, x_max, n)
 		for y in np.arange(y_min, x_max+spacing, spacing):
-			gridlines.append(self.construct_from_points_cartesian(np.asarray([[x_, y] for x_ in xs]), "gly="+str(y)))
+			gridlines.append(self.construct_from_points_cartesian(np.asarray([[x_, y] for x_ in xs]), "gly="+str(y), add_grid=False))
 			# np.column_stack((xs, np.full(n, y)))
 		ys = np.linspace(y_min, y_max, n)
 		for x in np.arange(x_min, x_max+spacing, spacing):
-			gridlines.append(self.construct_from_points_cartesian(np.asarray([[x, y_] for y_ in xs]), "glx="+str(x)))
+			gridlines.append(self.construct_from_points_cartesian(np.asarray([[x, y_] for y_ in xs]), "glx="+str(x), add_grid=False))
 			#np.column_stack((np.full(n, x), ys))),"glx="+str(x))
 		return gridlines
 	
-	def construct_from_points_polar(self, points_polar:np.ndarray, name:str="", add_grid:bool=False):
+	def construct_from_points_polar(self, points_polar:np.ndarray, name:str="", add_grid:bool=True):
 		'''
 		Constructs a Shape from a set of points given in polar coordinates.
 
@@ -52,7 +52,7 @@ class ShapeConstructor:
 			grid = self.construct_grid()
 		return Shape(points_polar, name, grid)
 	
-	def construct_from_points_cartesian(self, points_cartesian:np.ndarray, name:str="", add_grid:bool=False):
+	def construct_from_points_cartesian(self, points_cartesian:np.ndarray, name:str="", add_grid:bool=True):
 		'''
 		Constructs a Shape from a set of points given in cartesian coordinates.
 
@@ -72,7 +72,7 @@ class ShapeConstructor:
 		#print ("output polar:", points_polar)
 		return self.construct_from_points_polar(points_polar, name, add_grid)
 	
-	def construct_from_distancefct(self, distancefct, resolution:int=630, name:str="", add_grid:bool=False):
+	def construct_from_distancefct(self, distancefct, resolution:int=630, name:str="", add_grid:bool=True):
 		'''
 		Constructs a Shape from a distance function, i.e. a function that defines the distance to (0,0) given an angle theta.
 
@@ -206,17 +206,17 @@ class Shape:
 		#print ("cartesian points:", points_cartesian)
 		return points_cartesian
 	
-	def plot(self, axes, color:str='black', linewidth:float=1.0, plot_background_grid:bool=True, add_title:bool=True) -> None:
+	def plot(self, axes, color:str='black', linewidth:float=1.0, alpha=1.0, plot_background_grid:bool=True, add_title:bool=True) -> None:
 		'''
 		Plots the list of self.points on a specified axes of a matplotlib-figure.
 		'''
 		if self.has_background_grid and plot_background_grid:
 			# plot background grid:
 			for gridline in self.background_grid:
-				gridline.plot(axes, color='blue', linewidth=0.1)
+				gridline.plot(axes, color='blue', linewidth=0.1, alpha=0.3, add_title=False)
 		cartesian_coordinates = self.get_pointcoordinates_cartesian()
 		#print ("coords:", cartesian_coordinates)
-		axes.plot(cartesian_coordinates[:,0], cartesian_coordinates[:,1], color, linewidth)
+		axes.plot(cartesian_coordinates[:,0], cartesian_coordinates[:,1], color, linewidth, alpha=alpha)
 		if add_title:
 			axes.set_title(self.name)
 	
