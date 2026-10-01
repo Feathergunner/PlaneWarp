@@ -3,9 +3,9 @@
 
 import numpy as np
 
-### functions that compute projection of the radius of a point in polar coordinates:
+### functions that compute transformations of the radius of a point in polar coordinates:
 
-def projectradius_mirror(radius:float, radius_reference:float) -> float:
+def mirror(radius:float, radius_reference:float) -> float:
 	'''
 	Mirrors points at the reference distance, along the ray going through (0,0).
 	Note that this considers the reference line only point-wise, it ignores the angles.
@@ -13,7 +13,7 @@ def projectradius_mirror(radius:float, radius_reference:float) -> float:
 	'''
 	return 2*radius_reference-radius
 
-def projectradius_fisheye(radius:float, radius_reference:float) -> float:
+def fisheye(radius:float, radius_reference:float) -> float:
 	'''
 	Implements a fish-eye-effect by stretching the space around (0,0)
 	and compressing the space near the boundary of the reference shape (from the inside).
@@ -31,7 +31,7 @@ def projectradius_fisheye(radius:float, radius_reference:float) -> float:
 			radius,
 			(radius_reference-(x-1)**2))
 
-def projectradius_scale(radius:float, radius_reference:float) -> float:
+def scale(radius:float, radius_reference:float) -> float:
 	'''
 	Compresses all of R^2 into the reference shape.
 	Maps (0,0) to (0,0) and infinity to the boundary of the reference shape.

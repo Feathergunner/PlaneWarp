@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-import Projections
+import Transformations
 
 class ShapeConstructor:
 	'''
@@ -139,12 +139,12 @@ class Shape:
 		return self.points[:,1]
 	
 	### projections:
-	def _apply_projection(self, other, projectionfct):
+	def _apply_transformation(self, other, transformation_fct):
 		'''
-		Applies a given projectionfct with resprect to a reference-Shape to self.
+		Applies a given transformation_fct with resprect to a reference-Shape to self.
 
 		other: Shape
-			the reference-Shape that defines the scope of the projection.
+			the reference-Shape that defines the scope of the transformation.
 			The reference-Shape has to have a distancefct, because it has to be ensured that the reference fully encircles the (0,0)-point.
 		'''
 		## check that other.distancefct is not None, raise exception if None
@@ -154,20 +154,20 @@ class Shape:
 		radius = self.get_radius_range()
 
 		radius_other = other.distancefct(theta)
-		radius_projected = projectionfct(radius, radius_other)
+		radius_transformed = transformation_fct(radius, radius_other)
 		#print ("compute fixpoints...")
 		#print ("radius:",radius)
 		#print ("radius_other:",radius_other)
-		#print ("radius_projected:", radius_projected)
-		projected_points = np.concatenate((theta[:,None], radius_projected[:,None]),axis=1)
-		#print ("projected points:",projected_points)
-		return projected_points
+		#print ("radius_transformed:", radius_transformed)
+		morphed_points = np.concatenate((theta[:,None], radius_transformed[:,None]),axis=1)
+		#print ("morphed points:",morphed_points)
+		return morphed_points
 	
 	def __or__(self, other):
 		'''
 		define the | operator to implement mirroring along the boundary of the other Shape
 		'''
-		transformed_points = self._apply_projection(other, Projections.projectradius_mirror)
+		transformed_points = self._apply_transformation(other, Transformations.mirror)
 		transformed_name = self.name+"|"+other.name
 		transformed_grid = None
 		if self.has_background_grid:
@@ -178,7 +178,7 @@ class Shape:
 		'''
 		define the * operator to implement the fish-eye-effect in the interior of the other Shape
 		'''
-		transformed_points = self._apply_projection(other, Projections.projectradius_fisheye)
+		transformed_points = self._apply_transformation(other, Transformations.fisheye)
 		transformed_name = self.name+"*"+other.name
 		transformed_grid = None
 		if self.has_background_grid:
@@ -189,7 +189,7 @@ class Shape:
 		'''
 		define the ** operator to implement the scaling of R^2 into the interior of the other Shape
 		'''
-		transformed_points = self._apply_projection(other, Projections.projectradius_scale)
+		transformed_points = self._apply_transformation(other, Transformations.scale)
 		transformed_name = self.name+"**"+other.name
 		transformed_grid = None
 		if self.has_background_grid:
