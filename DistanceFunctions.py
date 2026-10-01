@@ -15,6 +15,59 @@ def distfct_square(theta:np.ndarray, sidelength:float=1.0, rotation:float=0.0) -
 	'''
 	return sidelength / np.maximum(np.abs(np.cos(theta+rotation)), np.abs(np.sin(theta+rotation)))
 
+def distfct_blossom(theta:np.ndarray, min_rad:float=0.3, max_rad:float=2, num_rays:int=4, rotation:float=0.0) -> np.ndarray:
+	'''
+	Defines a blossom-like shape, i.e. a star with slightly outward rounded rays
+	Works by linear interpolation of the distance to (0,0) in polar coordinates
+	
+	min_rad: minimum distance of the innermost points to the center
+	
+	num_rays: number of 'leaves' of the shape
+	
+	rotation: specifies a rotation of the shape (in radians)
+	'''
+	spline_length = (2*np.pi)/num_rays
+	x = ((theta+rotation)%spline_length)
+	return np.where(
+		x < 0.5*spline_length, # condition
+		min_rad  +  ((2*x/spline_length) * (max_rad-min_rad)), # if true
+		min_rad  +  (((spline_length-x)/(0.5*spline_length)) * (max_rad-min_rad))) # else
+
+def distfct_windrose(theta:np.ndarray, min_rad:float=0.3, max_rad:float=2, num_rays:int=8, rotation:float=0.0) -> np.ndarray:
+	'''
+	Defines a windrose-like shape, like the blossom-shape, but with only half leaves.
+	Works by linear interpolation of the distance to (0,0) in polar coordinates
+	
+	min_rad: minimum distance of the innermost points to the center
+	
+	num_rays: number of 'leaves' of the shape
+	
+	rotation: specifies a rotation of the shape (in radians)
+	'''
+	spline_length = (4.0*np.pi)/num_rays
+	x = ((theta+rotation)%spline_length)
+	return np.where(
+		((theta+rotation)%spline_length) < 0.5*spline_length, # condition
+		min_rad  +  ((2*x/spline_length) * (max_rad-min_rad)), # if true
+		max_rad  -  (((spline_length-x)/(0.5*spline_length)) * (max_rad-min_rad))) # else
+
+def distfct_gear(theta:np.ndarray, min_rad:float=0.9, max_rad:float=1.1, num_teeth:int=8, rotation:float=0.0) -> np.ndarray:
+	'''
+	defines a gear-like shape, i.e. a star with slightly outward rounded rays
+	the outer parts of the teeth have distance 1 to the center
+	
+	min_rad: distance of the inner ring of the gear
+	
+	num_teeth: number of teeth of the gear shape
+	
+	rotation: specifies a rotation of the shape (in radians)
+	'''
+	spline_length = (2*np.pi)/num_teeth
+	return np.where(
+		((theta+rotation)%spline_length) < 0.5*spline_length, # condition
+		max_rad, # if true
+		min_rad) # else
+
 ### Piecewise-linear distance functions:
 # generic function:
 def piecewise_distance(theta:np.ndarray, fixpoints:np.ndarray) -> np.ndarray:
