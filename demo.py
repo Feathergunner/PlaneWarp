@@ -112,7 +112,7 @@ def create_fancy_image():
 	# plot only the warped grid and outline at second subplot:
 	warped_shapes[0].plot_grid(ax[1])
 	reference.plot(ax[1], color='black', plot_background_grid=False, add_title=False)
-	ax[1].set_title("The grid after preojecting R^2 into the gear-shape")
+	ax[1].set_title("The grid after projecting R^2 into the gear-shape")
 
 	# plot the warped_shape at third subplot:
 	for i in range(5):
@@ -156,4 +156,4 @@ def create_fancy_image():
 
 if __name__ == '__main__':
 	create_simple_examples()
-	#create_fancy_image()
+	create_fancy_image()
