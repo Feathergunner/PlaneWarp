@@ -11,7 +11,7 @@ This project has three targets:
 3) nice code.
 
 ## Fancy Showcase
-The code to create these images is contained in the function 'create_fancy_image' of 'demo.py'.
+The code to create these images is contained in the function `create_fancy_image` of `demo.py`.
 ![fancy example image 1](examples/fancy_step_1.png)
 
 ![fancy example image 2](examples/fancy_step_2.png)
@@ -30,7 +30,8 @@ The final transformation maps the whole R²-plane into the red shape. The furthe
 ![mirror](examples/example_subspace.png)
 
 ## Quick start
-(The code from this section is also contained in `demo.py`.)
+(The code from this section can be found in the function `quickstart` of `demo.py`.)
+
 At first, we want to define a shape.
 To define a shape, use a ShapeConstructor
 ```
