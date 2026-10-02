@@ -10,7 +10,7 @@ class ShapeConstructor:
 	'''
 	Class to handle shape construction
 	'''
-	def init(_grid_bounds:float=2.0, _grid_spacing:float=0.25):
+	def __init__(self, _grid_bounds:float=2.0, _grid_spacing:float=0.25):
 		self.grid_bound = _grid_bounds
 		self.grid_spacing = _grid_spacing
 
@@ -229,14 +229,17 @@ class Shape:
 		Plots the list of self.points on a specified axes of a matplotlib-figure.
 		'''
 		if self.has_background_grid and plot_background_grid:
-			# plot background grid:
-			for gridline in self.background_grid:
-				gridline.plot(axes, color='blue', linewidth=0.1, alpha=0.3, add_title=False)
+			self.plot_grid(axes)
 		cartesian_coordinates = self.get_pointcoordinates_cartesian()
 		#print ("coords:", cartesian_coordinates)
 		axes.plot(cartesian_coordinates[:,0], cartesian_coordinates[:,1], color, linewidth, alpha=alpha)
 		if add_title:
 			axes.set_title(self.name)
+
+	def plot_grid(self, axes):
+		# plot background grid:
+		for gridline in self.background_grid:
+			gridline.plot(axes, color='blue', linewidth=0.1, alpha=0.3, add_title=False)
 	
 	def debug_plot_distance_fct(self, axes) -> None:
 		'''
