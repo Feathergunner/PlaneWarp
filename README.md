@@ -30,37 +30,58 @@ The final transformation maps the whole R²-plane into the red shape. The furthe
 ![mirror](examples/example_subspace.png)
 
 ## Quick start
-1) Define shapes:
+At first, we want to define a shape.
 To define a shape, use a ShapeConstructor
-'''
-import ShapeConstructor as SC
-sc = SC.ShapeConstructor()
-'''
-and then create a shape-object, for example using one of the pre-defined distance-functions (these are functions f:(0,2\*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
-'''
+```
+from Shapes import ShapeConstructor
+sc = ShapeConstructor()
+```
+and then create a shape-object, for example using one of the predefined distance-functions (these are functions f:(0,2\*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
+```
 import DistanceFunctions as DF
 windrose = sc.construct_from_distancefct(DF.distfct_windrose, name="windrose")
-'''
+```
 You don't have to specify a name, but the name of the shape can be used for plot titles.
+For other possible shapes, see `DistanceFunctions.py`, where these functions are defined.
+Note that you can also specify a shape by a list of points, this is supported by the functions `construct_from_points_cartesian` and `construct_from_points_polar` (depending on whether your points are in cartesian or in polar coordinates) of `ShapeConstructor`.
 
 Now to transform our windrose-shape into something fancy, we need to choose a transformation and a second shape to specify the scope of the transformation.
-Let's implement a fisheye-effect on the interior of a square:
-'''
+Let's implement a fisheye-effect on the interior of a square.
+Therefore we need a square-shape:
+```
 square = sc.construct_from_distancefct(DF.distfct_square, name="square")
-'''
+```
 And now, applying the transformation is straightforward, since the transformations are implemented as operators of shapes:
-'''
-fancy_fisheye_windrose = windrose\*square
-'''
+```
+fancy_fisheye_windrose = windrose*square
+```
+By the way, the three currently implemented operators are:
+- `shape|reference` implements the mirror-transformation,
+- `shape*reference` implements the fisheye-effect,
+- `shape**reference` implements the projection of R² into the reference shape.
+
 Now all that's left is to plot our transformed shape.
 To this end, we only need to initialize a matplotlib-figure and get the axes-element.
-With this, we can simply tell our shape to go plot itself:
-'''
+Since we want to plot a fancy image and not a mathematical function, we deactivate the axis and enforce that both dimensions have equal aspect:
+```
 from matplotlib import pyplot as plt
 ax = plt.gca()
+ax.set_aspect("equal")
+ax.axis("off")
+```
+With this, we can simply tell our shape to go plot itself:
+```
 fancy_fisheye_windrose.plot(ax)
 plt.show()
-'''
+```
+
+If you also want to display the reference-shape (the square) in red, as in the examples above, simply add the following line before the final `plt.show()`:
+```
+square.plot(ax, color='red', add_title=False, plot_background_grid=False)
+```
+Here, we explicitly state that the square should not overwrite the title of the plot (which was set to the name of the `fance_fisheye_windrose`-shape), and we also don't want the square to plot its background-grid.
+
+![quickstart](examples/quickstart.png)
 
 ## Requirements:
 Python 3.x (any reasonably recent version should do) with
@@ -68,11 +89,11 @@ Python 3.x (any reasonably recent version should do) with
 - matplotlib
 
 ## Project structure:
-- 'Shapes.py': the main classes that handle shapes, shape construction and shape transformations
-- 'Transformations.py': implementations of the spacial transformations.
-- 'DistanceFunctions.py': implementations of functions that define shape-geometry.
-- 'demo.py': examples, mainly all the code required to reconstruct the examples from this presentation.
-- 'examples/': generated example images
+- `Shapes.py`: the main classes that handle shapes, shape construction and shape transformations
+- `Transformations.py`: implementations of the spacial transformations.
+- `DistanceFunctions.py`: implementations of functions that define shape-geometry.
+- `demo.py`: examples, mainly all the code required to reconstruct the examples from this presentation.
+- `examples/`: generated example images
 
 ## Possible future extensions:
 - More default shapes.
