@@ -10,19 +10,37 @@ class ShapeConstructor:
 	'''
 	Class to handle shape construction
 	'''
-	def construct_grid(self, x_min:float=-2.0, x_max:float=2.0, y_min:float=-2.0, y_max:float=2.0, spacing:float=0.25, n:int=100) -> list:
+	def init(_grid_bounds:float=2.0, _grid_spacing:float=0.25):
+		self.grid_bound = _grid_bounds
+		self.grid_spacing = _grid_spacing
+
+	def construct_grid(self, x_min:float=None, x_max:float=None, y_min:float=None, y_max:float=None, spacing:float=None, n:int=100) -> list:
 		'''
 		Helper function that constructs a list of Shapes which define a regular grid.
 
 		x_min, x_max, y_min, y_max: float
 			define size of grid.
+			If not specified, these are set to +/- self.grid_bound
 		spacing: float
 			defines distance between gridlines.
+			If not specified, this is set to self.grid_spacing
 		n: int
 			defines number of points on each gridline. To plot the grid in cartesian coordinates, n=2 is sufficient
 			(gives startpoint and endpoint for each straight gridline).
 			However, if the grid is transformed by some projection, a higher resolution is necessary to correctly represent the warped gridlines.
 		'''
+		# Set default grid parameters:
+		if x_min is None:
+			x_min = -self.grid_bound
+		if x_max is None:
+			x_max = self.grid_bound
+		if y_min is None:
+			y_min = -self.grid_bound
+		if y_max is None:
+			y_max = self.grid_bound
+		if spacing is None:
+			spacing = self.grid_spacing
+
 		gridlines = []
 		xs = np.linspace(x_min, x_max, n)
 		for y in np.arange(y_min, x_max+spacing, spacing):
