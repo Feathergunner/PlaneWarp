@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from Shapes import ShapeConstructor
-import DistanceFunctions as DF
+import OutlineFunctions as OF
 
 def quickstart():
 	'''
@@ -16,15 +16,15 @@ def quickstart():
 	'''
 	and then create a shape-object, for example using one of the pre-defined distance-functions (these are functions f:(0,2*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
 	'''
-	import DistanceFunctions as DF
-	windrose = sc.construct_from_distancefct(DF.distfct_windrose, name="windrose")
+	import OutlineFunctions as OF
+	windrose = sc.construct_from_outlinefct(OF.outlinefct_windrose, name="windrose")
 	'''
 	You don't have to specify a name, but the name of the shape can be used for plot titles.
 	
 	Now to transform our windrose-shape into something fancy, we need to choose a transformation and a second shape to specify the scope of the transformation.
 	Let's implement a fisheye-effect on the interior of a square:
 	'''
-	square = sc.construct_from_distancefct(DF.distfct_square, name="square")
+	square = sc.construct_from_outlinefct(OF.outlinefct_square, name="square")
 	'''
 	And now, applying the transformation is straightforward, since the transformations are implemented as operators of shapes:
 	'''
@@ -78,18 +78,18 @@ def create_simple_examples():
 	
 	def distfct_largecircle(theta):
 		# a custom circle shape with larger radius than default
-		return DF.distfct_circle(theta, radius=2.1)
+		return OF.outlinefct_circle(theta, radius=2.1)
 
 	# initialize a ShapeConstructor for simplified shape construction:
 	sc = ShapeConstructor()
 
 	# define some shapes:
-	circle = sc.construct_from_distancefct(DF.distfct_circle, name="circle")
-	square = sc.construct_from_distancefct(DF.distfct_square, name="square")
-	blossom = sc.construct_from_distancefct(DF.distfct_blossom, name="blossom")
-	windrose = sc.construct_from_distancefct(DF.distfct_windrose, name="windrose")
-	gear = sc.construct_from_distancefct(DF.distfct_gear, name="gear")
-	largecircle = sc.construct_from_distancefct(distfct_largecircle, name="largecircle")
+	circle = sc.construct_from_outlinefct(OF.outlinefct_circle, name="circle")
+	square = sc.construct_from_outlinefct(OF.outlinefct_square, name="square")
+	blossom = sc.construct_from_outlinefct(OF.outlinefct_blossom, name="blossom")
+	windrose = sc.construct_from_outlinefct(OF.outlinefct_windrose, name="windrose")
+	gear = sc.construct_from_outlinefct(OF.outlinefct_gear, name="gear")
+	largecircle = sc.construct_from_outlinefct(distfct_largecircle, name="largecircle")
 
 	# construct some transformed shapes and plot them:
 	# mirror:
@@ -114,25 +114,25 @@ def create_fancy_image():
 	# define a set of similar shapes with increasing size:
 	# (a custom blossom-shape with 7 leaves)
 	def distfuct_blossom7_1(theta):
-		return DF.distfct_blossom(theta, min_rad=0.1, max_rad = 0.5, num_rays=7, rotation=0.5*np.pi)
+		return OF.outlinefct_blossom(theta, min_rad=0.1, max_rad = 0.5, num_rays=7, rotation=0.5*np.pi)
 	def distfuct_blossom7_2(theta):
-		return DF.distfct_blossom(theta, min_rad=0.2, max_rad = 0.75, num_rays=7, rotation=0.5*np.pi)
+		return OF.outlinefct_blossom(theta, min_rad=0.2, max_rad = 0.75, num_rays=7, rotation=0.5*np.pi)
 	def distfuct_blossom7_3(theta):
-		return DF.distfct_blossom(theta, min_rad=0.3, max_rad = 1.0, num_rays=7, rotation=0.5*np.pi)
+		return OF.outlinefct_blossom(theta, min_rad=0.3, max_rad = 1.0, num_rays=7, rotation=0.5*np.pi)
 	def distfuct_blossom7_4(theta):
-		return DF.distfct_blossom(theta, min_rad=0.4, max_rad = 1.25, num_rays=7, rotation=0.5*np.pi)
+		return OF.outlinefct_blossom(theta, min_rad=0.4, max_rad = 1.25, num_rays=7, rotation=0.5*np.pi)
 	def distfuct_blossom7_5(theta):
-		return DF.distfct_blossom(theta, min_rad=0.5, max_rad = 1.5, num_rays=7, rotation=0.5*np.pi)
+		return OF.outlinefct_blossom(theta, min_rad=0.5, max_rad = 1.5, num_rays=7, rotation=0.5*np.pi)
 	blossom_fcts = [distfuct_blossom7_1, distfuct_blossom7_2, distfuct_blossom7_3, distfuct_blossom7_4, distfuct_blossom7_5]
 
 	# Construct a set of basic shapes with increasing size:
 	sc = ShapeConstructor()
-	blossom_shapes = [sc.construct_from_distancefct(blossom_fcts[i], name="b"+str(i+1)) for i in range(5)]
+	blossom_shapes = [sc.construct_from_outlinefct(blossom_fcts[i], name="b"+str(i+1)) for i in range(5)]
 
 	# Construct a reference shape:
 	def distfct_gear(theta):
-		return DF.distfct_gear(theta, rotation=np.pi/16)
-	reference = sc.construct_from_distancefct(distfct_gear, name="reference")
+		return OF.outlinefct_gear(theta, rotation=np.pi/16)
+	reference = sc.construct_from_outlinefct(distfct_gear, name="reference")
 
 	# compute warped shapes:
 	warped_shapes = [blossom**reference for blossom in blossom_shapes]
@@ -165,8 +165,8 @@ def create_fancy_image():
 	# Aaaaand a second warp:
 	# construct another reference shape:
 	def distfct_smallsquare(theta):
-		return DF.distfct_square(theta, sidelength=0.5)
-	reference_2 = sc.construct_from_distancefct(distfct_smallsquare, name="reference_2")
+		return OF.outlinefct_square(theta, sidelength=0.5)
+	reference_2 = sc.construct_from_outlinefct(distfct_smallsquare, name="reference_2")
 	warped_shapes_2 = [shape|reference_2 for shape in warped_shapes]
 
 	# initialize plot:
@@ -196,5 +196,5 @@ def create_fancy_image():
 
 if __name__ == '__main__':
 	quickstart()
-	#create_simple_examples()
-	#create_fancy_image()
+	create_simple_examples()
+	create_fancy_image()

@@ -90,16 +90,16 @@ class ShapeConstructor:
 		#print ("output polar:", points_polar)
 		return self.construct_from_points_polar(points_polar, name, add_grid)
 	
-	def construct_from_distancefct(self, distancefct, resolution:int=630, name:str="", add_grid:bool=True):
+	def construct_from_outlinefct(self, outlinefct, resolution:int=630, name:str="", add_grid:bool=True):
 		'''
 		Constructs a Shape from a distance function, i.e. a function that defines the distance to (0,0) given an angle theta.
 
-		distancefct: Callable
+		outlinefct: Callable
 			a function that takes an np.ndarray of shape (n) (a list of angles theta) and
 			 returns an np.ndarray of shape (n) (a list of distances at the corresponding angles).
 		
 		resolution: int
-			defines how many points are constructed from the distancefct for initializing the shape.
+			defines how many points are constructed from the outlinefct for initializing the shape.
 
 		name: str
 			specifies a name to represent the shape (e.g. for plot captions)
@@ -111,9 +111,9 @@ class ShapeConstructor:
 		if add_grid:
 			grid = self.construct_grid()
 		theta = np.linspace(0, 2*np.pi, resolution)
-		radius = distancefct(theta)
+		radius = outlinefct(theta)
 		points_polar = np.column_stack((theta, radius))
-		return Shape(points_polar, name, grid, distancefct)
+		return Shape(points_polar, name, grid, outlinefct)
 
 class Shape:
 	'''
@@ -125,7 +125,7 @@ class Shape:
 	Shapes can have a background-grid, which is again a set of Shapes.
 	The grid is morphed together with the main shape, this can by used to visualize the projection.
 	'''
-	def __init__(self, _points_polar:np.ndarray, _name:str, _background_grid:list=None, _distancefct=None):
+	def __init__(self, _points_polar:np.ndarray, _name:str, _background_grid:list=None, _outlinefct=None):
 		# name of the shape (for generated filenames etc.):
 		self.name = _name
 		
@@ -134,7 +134,7 @@ class Shape:
 		
 		## only if shape has a distance-function, it counts as "complete" i.e. encircles the (0,0)-point.
 		## only these shapes qualify for beeing used as reference for transformations
-		self.distancefct = _distancefct
+		self.outlinefct = _outlinefct
 		
 		# background_grid: A list of Shapes.
 		# It is inteded that each Shapes represents a straight line and all Shapes together form a regular grid.
@@ -163,15 +163,15 @@ class Shape:
 
 		other: Shape
 			the reference-Shape that defines the scope of the transformation.
-			The reference-Shape has to have a distancefct, because it has to be ensured that the reference fully encircles the (0,0)-point.
+			The reference-Shape has to have a outlinefct, because it has to be ensured that the reference fully encircles the (0,0)-point.
 		'''
-		## check that other.distancefct is not None, raise exception if None
-		if other.distancefct is None:
-			raise Exception("Shape other has to have a distancefct")
+		## check that other.outlinefct is not None, raise exception if None
+		if other.outlinefct is None:
+			raise Exception("Shape other has to have a outlinefct")
 		theta = self.get_theta_range()
 		radius = self.get_radius_range()
 
-		radius_other = other.distancefct(theta)
+		radius_other = other.outlinefct(theta)
 		radius_transformed = transformation_fct(radius, radius_other)
 		#print ("compute fixpoints...")
 		#print ("radius:",radius)

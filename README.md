@@ -3,7 +3,7 @@ This is a small Python project for experimenting with transformations of the 2D 
 
 2D-Shapes can be easily defined and then transformed by mappings, such as a fisheye-effect. The mappings are in turn parameterized by another shape, e.g. the fisheye-effect is parameterized by a reference-shape which defines the area of the effect (in the case of the fishye-effect, everything outside of the reference shape remains unaltered).
 
- A background grid can be transformed along with the shape, making it possible to visualize how the transformation deforms the plane itself.
+A background grid can be transformed along with the shape, making it possible to visualize how the transformation deforms the plane itself.
 
 This project has three targets:
 1) fancy images,
@@ -30,26 +30,27 @@ The final transformation maps the whole R²-plane into the red shape. The furthe
 ![mirror](examples/example_subspace.png)
 
 ## Quick start
+(The code from this section is also contained in `demo.py`.)
 At first, we want to define a shape.
 To define a shape, use a ShapeConstructor
 ```
 from Shapes import ShapeConstructor
 sc = ShapeConstructor()
 ```
-and then create a shape-object, for example using one of the predefined distance-functions (these are functions f:(0,2\*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
+and then create a shape-object, for example using one of the predefined outline-functions (these are functions f:(0,2\*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
 ```
-import DistanceFunctions as DF
-windrose = sc.construct_from_distancefct(DF.distfct_windrose, name="windrose")
+import OutlineFunctions as OF
+windrose = sc.construct_from_outlinefct(OF.outlinefct_windrose, name="windrose")
 ```
 You don't have to specify a name, but the name of the shape can be used for plot titles.
-For other possible shapes, see `DistanceFunctions.py`, where these functions are defined.
+For other possible shapes, see `OutlineFunctions.py`, where these functions are defined.
 Note that you can also specify a shape by a list of points, this is supported by the functions `construct_from_points_cartesian` and `construct_from_points_polar` (depending on whether your points are in cartesian or in polar coordinates) of `ShapeConstructor`.
 
 Now to transform our windrose-shape into something fancy, we need to choose a transformation and a second shape to specify the scope of the transformation.
 Let's implement a fisheye-effect on the interior of a square.
 Therefore we need a square-shape:
 ```
-square = sc.construct_from_distancefct(DF.distfct_square, name="square")
+square = sc.construct_from_outlinefct(OF.outlinefct_square, name="square")
 ```
 And now, applying the transformation is straightforward, since the transformations are implemented as operators of shapes:
 ```
@@ -95,12 +96,12 @@ Python 3.x (any reasonably recent version should do) with
 ## Project structure:
 - `Shapes.py`: the main classes that handle shapes, shape construction and shape transformations
 - `Transformations.py`: implementations of the spacial transformations.
-- `DistanceFunctions.py`: implementations of functions that define shape-geometry.
+- `OutlineFunctions.py`: implementations of functions that define geometric shapes.
 - `demo.py`: examples, mainly all the code required to reconstruct the examples from this presentation.
 - `examples/`: generated example images
 
 ## Possible future extensions:
 - More default shapes.
 - More transformations.
-- A minimal web interface where users could create parameterized shapes and transformations without needing to code.
+- A minimal web interface where users can create parameterized shapes and transformations without writing code.
 - Extend the idea to full images.
