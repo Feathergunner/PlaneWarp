@@ -7,6 +7,38 @@ import matplotlib.pyplot as plt
 from Shapes import ShapeConstructor
 import DistanceFunctions as DF
 
+def quickstart():
+	'''
+	To define a shape, use a ShapeConstructor
+	'''
+	from Shapes import ShapeConstructor
+	sc = ShapeConstructor()
+	'''
+	and then create a shape-object, for example using one of the pre-defined distance-functions (these are functions f:(0,2*pi)->R that map radians to angles, thus defining the outline of a shape in polar coordinates). For example, a windrose:
+	'''
+	import DistanceFunctions as DF
+	windrose = sc.construct_from_distancefct(DF.distfct_windrose, name="windrose")
+	'''
+	You don't have to specify a name, but the name of the shape can be used for plot titles.
+	
+	Now to transform our windrose-shape into something fancy, we need to choose a transformation and a second shape to specify the scope of the transformation.
+	Let's implement a fisheye-effect on the interior of a square:
+	'''
+	square = sc.construct_from_distancefct(DF.distfct_square, name="square")
+	'''
+	And now, applying the transformation is straightforward, since the transformations are implemented as operators of shapes:
+	'''
+	fancy_fisheye_windrose = windrose*square
+	'''
+	Now all that's left is to plot our transformed shape.
+	To this end, we only need to initialize a matplotlib-figure and get the axes-element.
+	With this, we can simply tell our shape to go plot itself on the axes:
+	'''
+	from matplotlib import pyplot as plt
+	ax = plt.gca()
+	fancy_fisheye_windrose.plot(ax)
+	plt.show()
+	
 
 def create_simple_examples():
 	'''
@@ -153,7 +185,7 @@ def create_fancy_image():
 
 	plt.show()
 
-
 if __name__ == '__main__':
-	create_simple_examples()
-	create_fancy_image()
+	quickstart()
+	#create_simple_examples()
+	#create_fancy_image()
