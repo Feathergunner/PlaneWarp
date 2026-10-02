@@ -83,6 +83,10 @@ Here, we explicitly state that the square should not overwrite the title of the 
 
 ![quickstart](examples/quickstart.png)
 
+Oh, and this is what happens when you instead use the square as base shape and the windrose as reference for the fisheye-transformation (i.e. `fancy_fisheye_windrose = square*windrose`, and use the windrose-shape for the red plot in the end instead of the square):
+
+![alternate quickstart](examples/quickstart_alternate.png)
+
 ## Requirements:
 Python 3.x (any reasonably recent version should do) with
 - numpy

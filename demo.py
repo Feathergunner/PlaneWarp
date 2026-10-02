@@ -29,6 +29,8 @@ def quickstart():
 	And now, applying the transformation is straightforward, since the transformations are implemented as operators of shapes:
 	'''
 	fancy_fisheye_windrose = windrose*square
+	# secret tip: try this for fun:
+	#fancy_fisheye_windrose = square*windrose
 	'''
 	Now all that's left is to plot our transformed shape.
 	To this end, we only need to initialize a matplotlib-figure and get the axes-element.
@@ -44,8 +46,7 @@ def quickstart():
 	fancy_fisheye_windrose.plot(ax)
 	# optional: also plot the reference-shape in red:
 	square.plot(ax, color='red', add_title=False, plot_background_grid=False)
-	#plt.show()
-	plt.savefig("a.png")
+	plt.show()
 
 
 def create_simple_examples():
