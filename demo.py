@@ -32,13 +32,21 @@ def quickstart():
 	'''
 	Now all that's left is to plot our transformed shape.
 	To this end, we only need to initialize a matplotlib-figure and get the axes-element.
-	With this, we can simply tell our shape to go plot itself on the axes:
+	Since we want to plot a fancy image and not a mathematical function, we deactivate the axis and enforce that both dimensions have equal aspect:
 	'''
 	from matplotlib import pyplot as plt
 	ax = plt.gca()
+	ax.set_aspect("equal")
+	ax.axis("off")
+	'''
+	With this, we can simply tell our shape to go plot itself:
+	'''
 	fancy_fisheye_windrose.plot(ax)
-	plt.show()
-	
+	# optional: also plot the reference-shape in red:
+	square.plot(ax, color='red', add_title=False, plot_background_grid=False)
+	#plt.show()
+	plt.savefig("a.png")
+
 
 def create_simple_examples():
 	'''
